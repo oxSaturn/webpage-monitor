@@ -1,0 +1,63 @@
+name: Monitor four.meme create-token (Playwright snapshot → GitHub Issue)
+
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: |
+          npm install -D @playwright/test
+          npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        id: test
+        run: npx playwright test
+        env:
+          TARGET_URL: https://four.meme/create-token
+        continue-on-error: true
+
+      - name: Create GitHub Issue when changed
+        if: steps.test.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const when = new Date().toISOString();
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `four.meme create-token changed @ ${when}`,
+              body: [
+                "Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/下拉选项等）。",
+                "",
+                `Actions 运行详情（含 diff）： ${runUrl}`,
+                "",
+                "监控范围：",
+                "- Launch your token 表单（整体）",
+                "- Raised Token 下拉菜单（新增 token 项会触发）",
+                "",
+                "> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。"
+              ].join("\\n")
+            });
+
+      - name: Fail job if changed
+        if: steps.test.outcome == 'failure'
+        run: exit 1
