@@ -1,12 +1,13 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   timeout: 60_000,
   retries: 0,
   use: {
-    browserName: 'chromium',
+    browserName: "chromium",
     headless: true,
-    viewport: { width: 1280, height: 900 }
-  }
+    viewport: { width: 1280, height: 900 },
+  },
+  snapshotPathTemplate: "{testDir}/__snapshots__/{testFilePath}/{arg}{ext}",
 });
