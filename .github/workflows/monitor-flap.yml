@@ -1,8 +1,6 @@
 name: Monitor flap.sh launch (Playwright snapshot → GitHub Issue)
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch: {}
 
 permissions:

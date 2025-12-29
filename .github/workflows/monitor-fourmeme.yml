@@ -1,8 +1,6 @@
 name: Monitor four.meme create-token (Playwright snapshot → GitHub Issue)
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch: {}
 
 permissions:
