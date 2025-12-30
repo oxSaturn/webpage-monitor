@@ -43,22 +43,86 @@ jobs:
           script: |
             const when = new Date().toISOString();
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { execFileSync } = require('child_process');
+            const fs = require('fs');
+            const path = require('path');
+
+            function walk(dir) {
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              const files = [];
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory()) {
+                  files.push(...walk(fullPath));
+                } else {
+                  files.push(fullPath);
+                }
+              }
+              return files;
+            }
+
+            function getSnapshotDiff(includeTokens) {
+              const resultsDir = path.join(process.cwd(), 'test-results');
+              if (!fs.existsSync(resultsDir)) return null;
+              const files = walk(resultsDir);
+              const actuals = files.filter(file => /(?:^|[-_.])actual\.[^/]+$/i.test(path.basename(file)));
+              const diffs = [];
+              for (const actual of actuals) {
+                const base = path.basename(actual);
+                if (includeTokens && !includeTokens.some(token => base.includes(token))) continue;
+                const expected = actual.replace(/actual\./i, 'expected.');
+                if (!fs.existsSync(expected)) continue;
+                let diff = '';
+                try {
+                  diff = execFileSync('git', ['diff', '--no-index', '--', expected, actual], {
+                    encoding: 'utf8',
+                    maxBuffer: 1024 * 1024
+                  });
+                } catch (error) {
+                  diff = error.stdout ? error.stdout.toString() : '';
+                }
+                if (diff) diffs.push(diff.trim());
+              }
+              if (!diffs.length) return null;
+              const combined = diffs.join('\n');
+              const max = 6000;
+              if (combined.length > max) {
+                return `${combined.slice(0, max)}\n...diff truncated...`;
+              }
+              return combined;
+            }
+
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: context.workflow,
+              per_page: 2
+            });
+            const previousRun = runs.data.workflow_runs.find(run => run.id !== context.runId);
+            const previousUrl = previousRun ? previousRun.html_url : null;
+            const diffText = getSnapshotDiff([
+              'launch-form',
+              'launch-container',
+              'raised-token'
+            ]);
 
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `four.meme create-token changed @ ${when}`,
               body: [
-                "Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/下拉选项等）。",
-                "",
-                `Actions 运行详情（含 diff）： ${runUrl}`,
-                "",
-                "监控范围：",
-                "- Launch your token 表单（整体）",
-                "- Raised Token 下拉菜单（新增 token 项会触发）",
-                "",
-                "> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。"
-              ].join("\\n")
+                'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/下拉选项等）。',
+                `Actions 运行详情： ${runUrl}`,
+                `上一次运行： ${previousUrl || '未找到上一条记录'}`,
+                'Snapshot diff（expected vs actual）：',
+                '```diff',
+                diffText || 'Diff unavailable (no *-actual/*-expected files found).',
+                '```',
+                '监控范围：',
+                '- Launch your token 表单（整体）',
+                '- Raised Token 下拉菜单（新增 token 项会触发）',
+                '> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。'
+              ].join('\n')
             });
 
       - name: Create GitHub Issue when flap.sh changed
@@ -68,21 +132,81 @@ jobs:
           script: |
             const when = new Date().toISOString();
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { execFileSync } = require('child_process');
+            const fs = require('fs');
+            const path = require('path');
+
+            function walk(dir) {
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              const files = [];
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory()) {
+                  files.push(...walk(fullPath));
+                } else {
+                  files.push(fullPath);
+                }
+              }
+              return files;
+            }
+
+            function getSnapshotDiff(includeTokens) {
+              const resultsDir = path.join(process.cwd(), 'test-results');
+              if (!fs.existsSync(resultsDir)) return null;
+              const files = walk(resultsDir);
+              const actuals = files.filter(file => /(?:^|[-_.])actual\.[^/]+$/i.test(path.basename(file)));
+              const diffs = [];
+              for (const actual of actuals) {
+                const base = path.basename(actual);
+                if (includeTokens && !includeTokens.some(token => base.includes(token))) continue;
+                const expected = actual.replace(/actual\./i, 'expected.');
+                if (!fs.existsSync(expected)) continue;
+                let diff = '';
+                try {
+                  diff = execFileSync('git', ['diff', '--no-index', '--', expected, actual], {
+                    encoding: 'utf8',
+                    maxBuffer: 1024 * 1024
+                  });
+                } catch (error) {
+                  diff = error.stdout ? error.stdout.toString() : '';
+                }
+                if (diff) diffs.push(diff.trim());
+              }
+              if (!diffs.length) return null;
+              const combined = diffs.join('\n');
+              const max = 6000;
+              if (combined.length > max) {
+                return `${combined.slice(0, max)}\n...diff truncated...`;
+              }
+              return combined;
+            }
+
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: context.workflow,
+              per_page: 2
+            });
+            const previousRun = runs.data.workflow_runs.find(run => run.id !== context.runId);
+            const previousUrl = previousRun ? previousRun.html_url : null;
+            const diffText = getSnapshotDiff(['flap-tax-settings']);
 
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `flap.sh launch changed @ ${when}`,
               body: [
-                "Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/开关等）。",
-                "",
-                `Actions 运行详情（含 diff）： ${runUrl}`,
-                "",
-                "监控范围：",
-                "- Create Token 表单内的 Tax Settings 模块（Enable Tax 打开后）",
-                "",
-                "> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。"
-              ].join("\\n")
+                'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/开关等）。',
+                `Actions 运行详情： ${runUrl}`,
+                `上一次运行： ${previousUrl || '未找到上一条记录'}`,
+                'Snapshot diff（expected vs actual）：',
+                '```diff',
+                diffText || 'Diff unavailable (no *-actual/*-expected files found).',
+                '```',
+                '监控范围：',
+                '- Create Token 表单内的 Tax Settings 模块（Enable Tax 打开后）',
+                '> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。'
+              ].join('\n')
             });
 
       - name: Fail job if changed
