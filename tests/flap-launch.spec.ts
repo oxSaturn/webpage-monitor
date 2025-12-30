@@ -5,6 +5,7 @@ const URL = 'https://flap.sh/launch';
 function normalize(html: string) {
   return html
     .replace(/\s+/g, ' ')
+    .replace(/([?&]|&amp;)dpl=[^&"']+/g, '$1dpl=<hash>')
     .replace(/\b\d+(\.\d+)?\b/g, '<num>')
     .replace(/[a-f0-9]{32,}/gi, '<hash>')
     .trim();
