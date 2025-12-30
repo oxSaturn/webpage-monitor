@@ -46,6 +46,8 @@ jobs:
             const { execFileSync } = require('child_process');
             const fs = require('fs');
             const path = require('path');
+            const issueLabel = 'webpage-monitor';
+            const issueTitlePrefix = 'four.meme create-token changed';
 
             function walk(dir) {
               const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -106,24 +108,41 @@ jobs:
               'raised-token'
             ]);
 
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `four.meme create-token changed @ ${when}`,
-              body: [
-                'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/下拉选项等）。',
-                `Actions 运行详情： ${runUrl}`,
-                `上一次运行： ${previousUrl || '未找到上一条记录'}`,
-                'Snapshot diff（expected vs actual）：',
-                '```diff',
-                diffText || 'Diff unavailable (no *-actual/*-expected files found).',
-                '```',
-                '监控范围：',
-                '- Launch your token 表单（整体）',
-                '- Raised Token 下拉菜单（新增 token 项会触发）',
-                '> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。'
-              ].join('\n')
+            const body = [
+              'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/下拉选项等）。',
+              `Actions 运行详情： ${runUrl}`,
+              `上一次运行： ${previousUrl || '未找到上一条记录'}`,
+              'Snapshot diff（expected vs actual）：',
+              '```diff',
+              diffText || 'Diff unavailable (no *-actual/*-expected files found).',
+              '```',
+              '监控范围：',
+              '- Launch your token 表单（整体）',
+              '- Raised Token 下拉菜单（新增 token 项会触发）'
+            ].join('\n');
+
+            const existing = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open label:${issueLabel} in:title "${issueTitlePrefix}"`
             });
+            const issue = existing.data.items[0];
+
+            if (issue) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                title: `${issueTitlePrefix} @ ${when}`,
+                body
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `${issueTitlePrefix} @ ${when}`,
+                body,
+                labels: [issueLabel]
+              });
+            }
 
       - name: Create GitHub Issue when flap.sh changed
         if: steps.flap.outcome == 'failure'
@@ -135,6 +154,8 @@ jobs:
             const { execFileSync } = require('child_process');
             const fs = require('fs');
             const path = require('path');
+            const issueLabel = 'webpage-monitor';
+            const issueTitlePrefix = 'flap.sh launch changed';
 
             function walk(dir) {
               const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -191,23 +212,40 @@ jobs:
             const previousUrl = previousRun ? previousRun.html_url : null;
             const diffText = getSnapshotDiff(['flap-tax-settings']);
 
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `flap.sh launch changed @ ${when}`,
-              body: [
-                'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/开关等）。',
-                `Actions 运行详情： ${runUrl}`,
-                `上一次运行： ${previousUrl || '未找到上一条记录'}`,
-                'Snapshot diff（expected vs actual）：',
-                '```diff',
-                diffText || 'Diff unavailable (no *-actual/*-expected files found).',
-                '```',
-                '监控范围：',
-                '- Create Token 表单内的 Tax Settings 模块（Enable Tax 打开后）',
-                '> 如果你不想每次都开新 Issue，我也可以改成“更新同一个 Issue / 或只在变化后首次提醒”。'
-              ].join('\n')
+            const body = [
+              'Playwright snapshot 测试失败，说明页面可能发生变化（字段/按钮/开关等）。',
+              `Actions 运行详情： ${runUrl}`,
+              `上一次运行： ${previousUrl || '未找到上一条记录'}`,
+              'Snapshot diff（expected vs actual）：',
+              '```diff',
+              diffText || 'Diff unavailable (no *-actual/*-expected files found).',
+              '```',
+              '监控范围：',
+              '- Create Token 表单内的 Tax Settings 模块（Enable Tax 打开后）'
+            ].join('\n');
+
+            const existing = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open label:${issueLabel} in:title "${issueTitlePrefix}"`
             });
+            const issue = existing.data.items[0];
+
+            if (issue) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                title: `${issueTitlePrefix} @ ${when}`,
+                body
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `${issueTitlePrefix} @ ${when}`,
+                body,
+                labels: [issueLabel]
+              });
+            }
 
       - name: Fail job if changed
         if: steps.fourmeme.outcome == 'failure' || steps.flap.outcome == 'failure'
