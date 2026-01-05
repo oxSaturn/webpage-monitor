@@ -6,6 +6,7 @@ on:
 permissions:
   contents: read
   issues: write
+  actions: read
 
 jobs:
   monitor:
@@ -68,7 +69,7 @@ jobs:
             const runs = await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: context.workflow,
+              workflow_id: 'monitor-webpages.yml',
               per_page: 2
             });
             const previousRun = runs.data.workflow_runs.find(run => run.id !== context.runId);
@@ -135,7 +136,7 @@ jobs:
             const runs = await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: context.workflow,
+              workflow_id: 'monitor-webpages.yml',
               per_page: 2
             });
             const previousRun = runs.data.workflow_runs.find(run => run.id !== context.runId);
