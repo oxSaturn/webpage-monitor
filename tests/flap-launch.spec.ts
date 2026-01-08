@@ -8,6 +8,8 @@ function normalize(html: string) {
     .replace(/([?&]|&amp;)dpl=[^&"']+/g, '$1dpl=<hash>')
     .replace(/\b\d+(\.\d+)?\b/g, '<num>')
     .replace(/[a-f0-9]{32,}/gi, '<hash>')
+    .replace(/>\s+</g, '>\n<')
+    .replace(/"\s+(?=[^=]+=)/g, '"\n')
     .trim();
 }
 

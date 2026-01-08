@@ -10,6 +10,10 @@ function normalizeHtml(html: string) {
     .replace(/\b\d+(\.\d+)?\b/g, '<num>')
     // 常见长 hash（构建 hash / token）
     .replace(/[a-f0-9]{32,}/gi, '<hash>')
+    // 在标签间插入换行，方便 diff
+    .replace(/>\s+</g, '>\n<')
+    // 将属性换行，避免一整行太长
+    .replace(/"\s+(?=[^=]+=)/g, '"\n')
     .trim();
 }
 
