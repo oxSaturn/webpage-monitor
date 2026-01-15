@@ -47,6 +47,23 @@ test('Snapshot Raised Token dropdown items', async ({ page }) => {
 
   await expect(dropdown).toBeVisible({ timeout: 10_000 });
 
+  // There can be multiple dropdowns on the page; only act within the FIRST matched dropdown container.
+  // Ensure the selected item is reflected by aria-selected="true".
+  const selectedInFirstDropdown = dropdown.locator('[aria-selected="true"]').first();
+  if ((await selectedInFirstDropdown.count()) === 0) {
+    const firstOptionInFirstDropdown = dropdown.locator('[role="option"], [aria-selected]').first();
+    await expect(firstOptionInFirstDropdown).toBeVisible();
+    await firstOptionInFirstDropdown.click();
+
+    // Some dropdowns close on select; reopen so snapshot/assertion is stable.
+    if (!(await dropdown.isVisible())) {
+      await trigger.click();
+      await expect(dropdown).toBeVisible({ timeout: 10_000 });
+    }
+  }
+
+  await expect(dropdown.locator('[aria-selected="true"]').first()).toBeVisible();
+
   const html = await dropdown.evaluate(el => (el as HTMLElement).outerHTML);
   expect(normalizeOuterHtml(html)).toMatchSnapshot('raised-token-dropdown.outerHTML.txt');
 });
