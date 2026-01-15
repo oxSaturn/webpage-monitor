@@ -1,17 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const URL = 'https://flap.sh/launch';
+import { normalizeOuterHtml } from './utils/htmlSnapshot';
 
-function normalize(html: string) {
-  return html
-    .replace(/\s+/g, ' ')
-    .replace(/([?&]|&amp;)dpl=[^&"']+/g, '$1dpl=<hash>')
-    .replace(/\b\d+(\.\d+)?\b/g, '<num>')
-    .replace(/[a-f0-9]{32,}/gi, '<hash>')
-    .replace(/>\s+</g, '>\n<')
-    .replace(/"\s+(?=[^=]+=)/g, '"\n')
-    .trim();
-}
+const URL = 'https://flap.sh/launch';
 
 test('flap.sh – enable tax and snapshot tax settings', async ({ page }) => {
   // 1️⃣ 打开页面
@@ -40,5 +31,9 @@ test('flap.sh – enable tax and snapshot tax settings', async ({ page }) => {
 
   // 6️⃣ 对 Tax Settings 整个 div 打快照
   const html = await taxDiv.evaluate(el => (el as HTMLElement).outerHTML);
-  expect(normalize(html)).toMatchSnapshot('flap-tax-settings.after-click.outerHTML.txt');
+  expect(
+    normalizeOuterHtml(html, {
+      extraReplacements: [[/([?&]|&amp;)dpl=[^&"']+/g, '$1dpl=<hash>']],
+    })
+  ).toMatchSnapshot('flap-tax-settings.after-click.outerHTML.txt');
 });

@@ -1,36 +1,36 @@
-<form><div class="lg:mx-auto px-[<num>%] lg:px-<num> py-[40px] w-full lg:w-[741px] min-w-<num>"><h1 class="inline-block bg-clip-text bg-gradient-to-r from-[#FFF494] to-[#6CFF32] mb-<num> w-full text-transparent text-center uppercase t-<num>-<num> lg:t-<num>-<num>">Launch your token</h1><div class="flex-v lg:flex-h items-center lg:items-end gap-<num> lg:gap-<num> w-full"><div class="w-[168px] h-[168px]"><div class="avatar-uploader"><input type="file"
+<form><div class="lg:mx-auto px-[<num>%] lg:px-<num> py-[40px] w-full lg:w-[741px] min-w-<num>"><h1 class="inline-block bg-clip-text bg-gradient-to-r from-[#FFF494] to-[#6CFF32] mb-<num> w-full text-transparent text-center uppercase t-<num>-<num> lg:t-<num>-<num>">Launch your token</h1><div class="flex-v lg:flex-h items-center lg:items-end gap-<num> lg:gap-<num> w-full"><div class="w-[168px] h-[168px]"><div class="avatar-uploader"><input class="hidden"
 name="avatar"
-class="hidden"><div class="cursor-pointer"><div class="relative flex-v justify-center items-center pb-<num> w-[168px] h-[168px]"><div class="w-[44px] h-[44px] ant-upload-button-bg"></div><span class="mx-auto mt-<num> text-center t-<num>-<num>-gray">PNG-JPEG-WEBP-GIF<div>Max Size: 5MB</div></span></div></div></div></div><div class="flex-<num> flex-v gap-[32px] w-full"><div class="
+type="file"><div class="cursor-pointer"><div class="relative flex-v justify-center items-center pb-<num> w-[168px] h-[168px]"><div class="w-[44px] h-[44px] ant-upload-button-bg"></div><span class="mx-auto mt-<num> text-center t-<num>-<num>-gray">PNG-JPEG-WEBP-GIF<div>Max Size: 5MB</div></span></div></div></div></div><div class="flex-<num> flex-v gap-[32px] w-full"><div class="
 w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Token Name</p><div class="mt-<num> ml-<num> text-[#FF4A32] t-<num>-<num>">*</div></span><div><input class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> baseInput"
 name="name"
 value=""></div></div><div class="
 w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Ticker Symbol</p><div class="mt-<num> ml-<num> text-[#FF4A32] t-<num>-<num>">*</div></span><div><input class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> baseInput"
 name="shortName"
 value=""></div></div></div></div><div class="flex-v gap-[14px] lg:gap-<num> mt-[32px] w-full"><div class="
-w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Description</p><div class="mt-<num> ml-<num> text-[#FF4A32] t-<num>-<num>">*</div></span><div><textarea rows="<num>"
-class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> resize-none"
+w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Description</p><div class="mt-<num> ml-<num> text-[#FF4A32] t-<num>-<num>">*</div></span><div><textarea class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> resize-none"
+name="desc"
 placeholder=""
-name="desc"></textarea></div></div><div class="
-w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Raised Token</p></span><div class="relative mx-auto w-full h-[50px]"><button class="relative flex-h justify-between items-center bg-darkGray900 px-<num> border border-darkGray800 rounded-[8px] w-full h-[50px]"
-id="headlessui-listbox-button-:rf:"
-type="button"
+rows="<num>"></textarea></div></div><div class="
+w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Raised Token</p></span><div class="relative mx-auto w-full h-[50px]"><button aria-expanded="false"
 aria-haspopup="listbox"
-aria-expanded="false"
-data-headlessui-state=""><div class="flex-<num> flex-h justify-between items-center pr-<num> lg:pr-<num>"><div class="w-fit flex items-center flex-nowrap gap-[6px] flex-row"><img fetchpriority="high"
-width="<num>"
-height="<num>"
-decoding="async"
-data-nimg="<num>"
+class="relative flex-h justify-between items-center bg-darkGray900 px-<num> border border-darkGray800 rounded-[8px] w-full h-[50px]"
+data-headlessui-state=""
+id="headlessui-listbox-button-:rf:"
+type="button"><div class="flex-<num> flex-h justify-between items-center pr-<num> lg:pr-<num>"><div class="w-fit flex items-center flex-nowrap gap-[6px] flex-row"><img alt="BNB"
 class=""
+data-nimg="<num>"
+decoding="async"
+fetchpriority="high"
+height="<num>"
 src="https://static.four.meme/market/fc6c4c92-63a3-<num>-bc27-355ea380a6795959172881106751506.png"
 style="color: transparent;"
-alt="BNB"><span class="t-<num>-<num>-white !t-<num>-<num>-white">BNB</span></div><span class="text-right text-nowrap t-<num>-<num>-gray lg:t-<num>-<num>-gray">Raised Amount: <num> BNB</span></div><svg fill="#545C68"
-width="<num>"
+width="<num>"><span class="t-<num>-<num>-white !t-<num>-<num>-white">BNB</span></div><span class="text-right text-nowrap t-<num>-<num>-gray lg:t-<num>-<num>-gray">Raised Amount: <num> BNB</span></div><svg class="text-[#<num>]"
+fill="#545C68"
 viewBox="<num>
 <num>
 <num>
 <num>"
-class="text-[#<num>]"><path d="M6.<num>
+width="<num>"><path d="M6.<num>
 <num>.79144L1.<num>
 <num>.666603L0.<num>
 <num>.8451L6.<num>
@@ -41,31 +41,31 @@ class="text-[#<num>]"><path d="M6.<num>
 fill="currentColor"></path></svg></button></div></div><div class="
 w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Website</p></span><div><input class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> baseInput"
 maxlength="<num>"
-placeholder="(Optional)"
 name="webUrl"
+placeholder="(Optional)"
 value=""></div></div><div class="
 w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Twitter</p></span><div><input class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> baseInput"
 maxlength="<num>"
-placeholder="(Optional)"
 name="twitterUrl"
+placeholder="(Optional)"
 value=""></div></div><div class="
 w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Telegram</p></span><div><input class="bg-transparent px-<num> py-<num> border border-[#252B33] hover:border-[#3a3f47] focus:border-primary rounded-lg focus:ring-<num> focus:ring-primary/<num> w-full text-white placeholder:text-[#545C68] transition-colors duration-<num> baseInput"
 maxlength="<num>"
-placeholder="(Optional)"
 name="telegramUrl"
+placeholder="(Optional)"
 value=""></div></div><div class="
-w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Tag</p></span><div class="relative mx-auto w-full h-[50px]"><button class="relative flex-h justify-between items-center bg-darkGray900 px-<num> border border-darkGray800 rounded-[8px] w-full h-[50px] text-left"
-id="headlessui-listbox-button-:rl:"
-type="button"
+w-full flex-v "><span class="flex-h flex-wrap t-<num>-<num>-gray lg:t-<num>-<num>-gray "><p class="mb-<num> lg:mb-<num> text-nowrap">Tag</p></span><div class="relative mx-auto w-full h-[50px]"><button aria-expanded="false"
 aria-haspopup="listbox"
-aria-expanded="false"
-data-headlessui-state="">Meme<svg fill="#545C68"
-width="<num>"
+class="relative flex-h justify-between items-center bg-darkGray900 px-<num> border border-darkGray800 rounded-[8px] w-full h-[50px] text-left"
+data-headlessui-state=""
+id="headlessui-listbox-button-:rl:"
+type="button">Meme<svg class="text-[#<num>]"
+fill="#545C68"
 viewBox="<num>
 <num>
 <num>
 <num>"
-class="text-[#<num>]"><path d="M6.<num>
+width="<num>"><path d="M6.<num>
 <num>.79144L1.<num>
 <num>.666603L0.<num>
 <num>.8451L6.<num>
@@ -74,5 +74,5 @@ class="text-[#<num>]"><path d="M6.<num>
 <num>.666604L6.<num>
 <num>.79144Z"
 fill="currentColor"></path></svg></button></div></div></div><div class="flex-v-cc gap-<num> mt-[46px] w-full"><span class="mb-<num> font-medium text-[#545C68] text-[16px]">Cost to deploy: <num> BNB</span><button class="bg-primary data-[disabled]:bg-[#6CFF324D] rounded-[8px] w-full h-[56px] t-<num>-<num>-black"
-type="button"
-data-headlessui-state=""><span>Connect Wallet</span></button></div></div></form>
+data-headlessui-state=""
+type="button"><span>Connect Wallet</span></button></div></div></form>
